@@ -7,8 +7,11 @@ jobs:
   upload:
     runs-on: ubuntu-latest
     steps:
-      - name: Generate Dummy Files
-        run: for i in {1..10}; do echo "test data" > file_$i.txt; done
+      - name: Generate Dummy Files (10MB each)
+        run: |
+          for i in {1..10}; do 
+            dd if=/dev/zero of=file_$i.txt bs=1M count=10; 
+          done
       - name: Upload to S3
         run: aws s3 cp ./ s3://cloud-storage-bucket54/ --recursive
         env:
