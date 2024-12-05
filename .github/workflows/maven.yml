@@ -1,5 +1,6 @@
 name: Upload Dummy Data to S3
 on:
+  workflow_dispatch:
   schedule:
     - cron: '*/5 * * * *'
 jobs:
