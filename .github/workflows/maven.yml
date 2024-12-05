@@ -9,13 +9,21 @@ jobs:
     steps:
       - name: Generate Dummy Files (10MB each)
         run: |
-          for i in {1..10}; do 
-            TIMESTAMP=$(date +%s%N)  # Get current timestamp in nanoseconds
+          for i in {1..10}; do
+            TIMESTAMP=$(date +%s%N)  # Get current timestamp in nanoseconds for unique file names
             dd if=/dev/zero of=file_${TIMESTAMP}_$i.txt bs=1M count=10; 
           done
-      - name: Upload to S3
+
+      - name: Upload to First S3 Bucket
         run: aws s3 cp ./ s3://cloud-storage-bucket54/ --recursive
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          
+      - name: Upload to Second S3 Bucket
+        run: aws s3 cp ./ s3://testing554/ --recursive
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
 
