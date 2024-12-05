@@ -2,7 +2,7 @@ name: Upload Dummy Data to S3
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/20 * * * *' # Runs every 20 minutes
 jobs:
   upload:
     runs-on: ubuntu-latest
@@ -10,10 +10,12 @@ jobs:
       - name: Generate Dummy Files (10MB each)
         run: |
           for i in {1..10}; do 
-            dd if=/dev/zero of=file_$i.txt bs=1M count=10; 
+            TIMESTAMP=$(date +%s%N)  # Get current timestamp in nanoseconds
+            dd if=/dev/zero of=file_${TIMESTAMP}_$i.txt bs=1M count=10; 
           done
       - name: Upload to S3
         run: aws s3 cp ./ s3://cloud-storage-bucket54/ --recursive
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
