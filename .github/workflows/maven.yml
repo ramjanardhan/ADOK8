@@ -2,7 +2,7 @@ name: Upload Dummy Data to S3
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*/20 * * * *' # Runs every 20 minutes
+    - cron: '*/5 * * * *' # Runs every 20 minutes
 jobs:
   upload:
     runs-on: ubuntu-latest
